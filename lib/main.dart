@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() => runApp(const MyApp());
 
@@ -7,11 +7,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Demo App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple.shade100),
-        useMaterial3: true,
+      theme: const CupertinoThemeData(
+        primaryColor: CupertinoColors.systemPurple,
+        scaffoldBackgroundColor: CupertinoColors.systemBackground,
       ),
       initialRoute: '/',
       routes: {
@@ -31,53 +31,62 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color softPurple = const Color.fromRGBO(155, 138, 233, 1);
-    final Color gradientStart = Colors.deepPurple.shade50;
-    final Color gradientEnd = Colors.deepPurple.shade200;
-
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [gradientStart, gradientEnd],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+    // Diseño más limpio: fondo neutro, icono grande y botón con icono
+    return CupertinoPageScaffold(
+      child: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 36),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                Container(
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemGrey6.resolveFrom(context),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  child: Icon(
+                    CupertinoIcons.sparkles,
+                    color: CupertinoColors.systemPurple.resolveFrom(context),
+                    size: 56,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                const Text(
                   'Bienvenida Gianella',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Accede a tu cuenta para continuar',
                   style: TextStyle(
-                    color: softPurple,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+                    color: CupertinoColors.systemGrey.resolveFrom(context),
+                    fontSize: 14,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 36),
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: softPurple,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 5,
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
-                    child: const Text(
-                      'Iniciar Sesión',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  height: 48,
+                  child: CupertinoButton.filled(
+                    onPressed: () => Navigator.pushNamed(context, '/login'),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(CupertinoIcons.person_fill, size: 18),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Iniciar Sesión',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -99,69 +108,110 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController userController = TextEditingController();
     final TextEditingController passController = TextEditingController();
 
-    final Color softPurple = const Color.fromRGBO(155, 138, 233, 1);
-
-    return Scaffold(
-      appBar: AppBar(
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
         automaticallyImplyLeading: false,
-        title: const Text('Iniciar Sesión'),
-        backgroundColor: Colors.deepPurple.shade100,
-        foregroundColor: softPurple,
+        middle: Text('Iniciar Sesión'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  controller: userController,
-                  decoration: InputDecoration(
-                    labelText: 'Usuario',
-                    border: OutlineInputBorder(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // Usuario
+                  Container(
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemGrey6.resolveFrom(context),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: passController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.person,
+                          color: CupertinoColors.systemGrey,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: CupertinoTextField(
+                            controller: userController,
+                            placeholder: 'Usuario',
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                              horizontal: 8,
+                            ),
+                            decoration: null,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple.shade200,
-                      foregroundColor: softPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 16),
+                  // Contraseña
+                  Container(
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemGrey6.resolveFrom(context),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.lock,
+                          color: CupertinoColors.systemGrey,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: CupertinoTextField(
+                            controller: passController,
+                            placeholder: 'Contraseña',
+                            obscureText: true,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                              horizontal: 8,
+                            ),
+                            decoration: null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: CupertinoButton.filled(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/main',
+                          (route) => false,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            CupertinoIcons.arrow_right_circle_fill,
+                            size: 18,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Iniciar Sesión',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
-                      elevation: 5,
-                    ),
-                    onPressed: () {
-                      // Navegación sin historial para evitar volver al login o bienvenida
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/main',
-                        (route) => false,
-                      );
-                    },
-                    child: const Text(
-                      'Iniciar Sesión',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -176,54 +226,45 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color softPurple = const Color.fromRGBO(155, 138, 233, 1);
-
-    return Scaffold(
-      appBar: AppBar(
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
         automaticallyImplyLeading: false,
-        title: const Text('Bienvenida Gianella'),
-        backgroundColor: Colors.deepPurple.shade100,
-        foregroundColor: softPurple,
+        middle: Text('Inicio'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              customStyledButton(
-                context,
-                label: 'Comentarios',
-                onTap: () {
-                  Navigator.pushNamed(context, '/comments');
-                },
-                borderRadius: BorderRadius.circular(12),
-              ),
-              const SizedBox(height: 20),
-              customStyledButton(
-                context,
-                label: 'Settings',
-                onTap: () {
-                  Navigator.pushNamed(context, '/settings');
-                },
-                borderRadius: BorderRadius.circular(12),
-              ),
-              const SizedBox(height: 20),
-              customStyledButton(
-                context,
-                label: 'Logout',
-                onTap: () {
-                  // Logout: regresa a bienvenida y elimina historial
-                  Navigator.pushNamedAndRemoveUntil(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                customStyledButton(
+                  context,
+                  label: 'Comentarios',
+                  icon: CupertinoIcons.chat_bubble_2_fill,
+                  onTap: () => Navigator.pushNamed(context, '/comments'),
+                ),
+                const SizedBox(height: 16),
+                customStyledButton(
+                  context,
+                  label: 'Registrar Producto',
+                  icon: CupertinoIcons.add_circled_solid,
+                  onTap: () => Navigator.pushNamed(context, '/settings'),
+                ),
+                const SizedBox(height: 16),
+                customStyledButton(
+                  context,
+                  label: 'Cerrar Sesión',
+                  icon: CupertinoIcons.square_arrow_right,
+                  isLogout: true,
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/',
                     (route) => false,
-                  );
-                },
-                borderRadius: BorderRadius.circular(12),
-                isLogout: true,
-              ),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -231,54 +272,62 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-// Botón personalizado
-Widget customStyledButton(BuildContext context,
-    {required String label,
-    required VoidCallback onTap,
-    double height = 50,
-    BorderRadius borderRadius = BorderRadius.zero,
-    bool isLogout = false}) {
-  final Color mainColor = Colors.deepPurple.shade300;
-  final Color backgroundColor = isLogout
-      ? mainColor.withAlpha((0.15 * 255).round())
-      : Colors.deepPurple.shade50;
+// Botón personalizado con estilo Cupertino
+Widget customStyledButton(
+  BuildContext context, {
+  required String label,
+  required VoidCallback onTap,
+  IconData? icon,
+  double height = 56,
+  bool isLogout = false,
+}) {
+  final Color mainColor = CupertinoColors.activeBlue.resolveFrom(context);
+  final Color bg = isLogout
+      ? CupertinoColors.systemRed.resolveFrom(context).withOpacity(0.08)
+      : CupertinoColors.systemGrey6.resolveFrom(context);
 
-  return InkWell(
-    onTap: onTap,
-    borderRadius: borderRadius,
-    child: Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: borderRadius,
-        border: Border.all(color: mainColor, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: mainColor.withAlpha((0.15 * 255).round()),
-            offset: const Offset(0, 3),
-            blurRadius: 7,
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: mainColor,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+  return SizedBox(
+    width: double.infinity,
+    height: height,
+    child: CupertinoButton(
+      padding: EdgeInsets.zero,
+      borderRadius: BorderRadius.circular(12),
+      onPressed: onTap,
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                color: isLogout ? CupertinoColors.systemRed : mainColor,
+              ),
+              const SizedBox(width: 12),
+            ],
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: isLogout
+                      ? CupertinoColors.systemRed
+                      : CupertinoColors.label.resolveFrom(context),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: mainColor,
-            size: 20,
-          ),
-        ],
+            Icon(
+              CupertinoIcons.chevron_forward, // indicación sutil
+              color: CupertinoColors.systemGrey.resolveFrom(context),
+              size: 18,
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -304,31 +353,69 @@ class CommentsScreen extends StatelessWidget {
       'La última pregunta xd',
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Comentarios'),
-        backgroundColor: Colors.deepPurple.shade100,
-        foregroundColor: const Color.fromRGBO(155, 138, 233, 1),
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        itemCount: comments.length,
-        itemBuilder: (context, index) {
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.comment, color: Colors.deepPurple),
-              title: Text(
-                comments[index],
-                style: const TextStyle(fontSize: 16),
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(middle: Text('Comentarios')),
+      child: SafeArea(
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          itemCount: comments.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: CupertinoColors.systemGrey6.resolveFrom(context),
+                borderRadius: BorderRadius.circular(12),
               ),
-            ),
-          );
-        },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemGrey
+                          .resolveFrom(context)
+                          .withOpacity(0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      CupertinoIcons.person_alt,
+                      color: CupertinoColors.systemGrey,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Usuario',
+                          style: TextStyle(
+                            color: CupertinoColors.systemGrey.resolveFrom(
+                              context,
+                            ),
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          comments[index],
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    CupertinoIcons.ellipsis,
+                    color: CupertinoColors.systemGrey.resolveFrom(context),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -353,85 +440,145 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     final price = priceController.text.trim();
 
     if (name.isNotEmpty && desc.isNotEmpty && price.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Producto "$name" registrado.')),
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text('Producto Registrado'),
+          content: Text('Producto "$name" registrado correctamente.'),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
       );
       nameController.clear();
       descController.clear();
       priceController.clear();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor llena todos los campos')),
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text('Campos Incompletos'),
+          content: const Text('Por favor llena todos los campos'),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color softPurple = const Color.fromRGBO(155, 138, 233, 1);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registrar Producto'),
-        backgroundColor: Colors.deepPurple.shade100,
-        foregroundColor: softPurple,
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Registrar Producto'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'Nombre del producto',
-                  border: OutlineInputBorder(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Nombre con icono
+                Container(
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemGrey6.resolveFrom(context),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: descController,
-                decoration: InputDecoration(
-                  labelText: 'Descripción',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.tag,
+                        color: CupertinoColors.systemGrey,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: CupertinoTextField(
+                          controller: nameController,
+                          placeholder: 'Nombre del producto',
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 8,
+                          ),
+                          decoration: null,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: priceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Precio',
-                  border: OutlineInputBorder(
+                const SizedBox(height: 15),
+                // Descripción
+                Container(
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemGrey6.resolveFrom(context),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-              ),
-              const SizedBox(height: 25),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _registerProduct,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 208, 193, 235),
-                    foregroundColor: softPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: CupertinoTextField(
+                    controller: descController,
+                    placeholder: 'Descripción',
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 8,
                     ),
-                    elevation: 5,
-                  ),
-                  child: const Text(
-                    'Registrar',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    decoration: null,
+                    maxLines: 3,
                   ),
                 ),
-              )
-            ],
+                const SizedBox(height: 15),
+                // Precio
+                Container(
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemGrey6.resolveFrom(context),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.money_dollar,
+                        color: CupertinoColors.systemGrey,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: CupertinoTextField(
+                          controller: priceController,
+                          placeholder: 'Precio',
+                          keyboardType: TextInputType.number,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 8,
+                          ),
+                          decoration: null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 25),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: CupertinoButton.filled(
+                    onPressed: _registerProduct,
+                    child: const Text(
+                      'Registrar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
